@@ -8,6 +8,7 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@SuppressWarnings("serial")
 public class Join extends JFrame {
 
     private JTextField nameTf; // 이름 입력 필드
@@ -160,25 +161,6 @@ public class Join extends JFrame {
             bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    static class Member {
-        private String name;
-        private String id;
-        private String password;
-        private String phoneNumber;
-
-        public Member(String name, String id, String password, String phoneNumber) {
-            this.name = name;
-            this.id = id;
-            this.password = password;
-            this.phoneNumber = phoneNumber;
-        }
-
-        @Override
-        public String toString() {
-            return "이름: " + name + ", 아이디: " + id + ", 비밀번호: " + password + ", 전화번호: "+ phoneNumber;
         }
     }
 

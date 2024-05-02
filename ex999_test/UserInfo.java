@@ -8,12 +8,14 @@ public class UserInfo {
 	private String airplane;
 	private String destination;
 	private String date;
-	private String people;
+	private int people;
 	
 	public UserInfo () { }
 	
-	public UserInfo (String id) {
+	public UserInfo (String id, String name, String number) {
 		this.id = id;
+		this.name = name;
+		this.number = number;
 	}
 
 	public String getName() {
@@ -68,16 +70,18 @@ public class UserInfo {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getPeople() {
+	public int getPeople() {
 		return people;
 	}
 
-	public void setPeople(String people) {
+	public void setPeople(int people) {
 		this.people = people;
+	}
+	
+	@Override
+	public String toString() {
+		return "아이디: " + id + ", 이름: " + name + ", 전화번호: " + number + ", 항공사: " + airline + ", 항공편: " + airplane +
+				", 도착지: " + destination + ", 날짜: " + date + ", 인원: " + people;
 	}
 	
 }

@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class ReservationDetails {
-	
+public class ReservationDetails extends JFrame{
 	
 
 	/*
@@ -34,7 +34,7 @@ public class ReservationDetails {
 	 *
 	 * */
 
-	JMenuBar jpBar;
+	JMenuBar jMenu;
 	JPanel jpCon;
 	JPanel jpCheck;
 	
@@ -47,13 +47,13 @@ public class ReservationDetails {
 		
 		this.userInfo = userInfo;
 		
-		// 상단 바 - 로그아웃
-		jpBar = new JMenuBar ();
-		jpBar.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-		JButton logout = new JButton("로그아웃");
-		logout.setPreferredSize(new Dimension(100, 35));
+		// 상단 바 - 예매내역, 로그아웃
+		jMenu = new JMenuBar ();
 
-		jpBar.add(logout);
+    	JMenuItem logout = new JMenuItem("로그아웃");
+    	jMenu.setLayout(new FlowLayout(FlowLayout.RIGHT, 12, 5));
+    	
+    	jMenu.add(logout);
 		
 		// 예매내역
 		jpCon = new JPanel();
@@ -91,6 +91,7 @@ public class ReservationDetails {
 		
 		JLabel uAirline = new JLabel(userInfo.getAirline());
 		uAirline.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+		uAirline.setPreferredSize(new Dimension(200, 40));
 		
 		JLabel uAirplane = new JLabel(userInfo.getAirplane());
 		uAirline.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
@@ -108,7 +109,6 @@ public class ReservationDetails {
 		
 		JLabel uDestInfo = new JLabel(userInfo.getDestination());
 		uDestInfo.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
-		uDestInfo.setPreferredSize(new Dimension(200, 40));
 		
 		JLabel rGo = new JLabel("가는 날");
 		rGo.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
@@ -119,6 +119,7 @@ public class ReservationDetails {
 		
 		JLabel uGo = new JLabel(userInfo.getDate());
 		uGo.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+		uGo.setPreferredSize(new Dimension(200, 40));
 		
 		JLabel uPeople = new JLabel(userInfo.getPeople() + "명");
 		uPeople.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
@@ -165,13 +166,12 @@ public class ReservationDetails {
 		jpCheck.add(download);
 		jpCheck.add(main);
 		
-		JFrame f = new JFrame();
-		f.setJMenuBar(jpBar);
-		f.add(jpCon, BorderLayout.CENTER);
-		f.add(jpCheck, BorderLayout.SOUTH);
-		f.setSize(1400,800);
-		
-		f.setVisible(true);
+		setJMenuBar(jMenu);
+		add(jpCon, BorderLayout.CENTER);
+		add(jpCheck, BorderLayout.SOUTH);
+		setSize(1400,800);
+        setLocationRelativeTo(null);
+		setVisible(true);
 		
 		
 		// 로그아웃 버튼 클릭 시 로그아웃 되고 로그인 페이지로 이동
@@ -180,9 +180,9 @@ public class ReservationDetails {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 로그인 창 호출
-				logout();
-				// new ();
-				f.setVisible(false);
+				new Logout(userInfo);
+				new LoginForm();
+				setVisible(false);
 			}
 			
 		});
@@ -193,7 +193,30 @@ public class ReservationDetails {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-			}
+				String reservationInfo = "이름 : " + userInfo.getName() + "\n전화번호 : " + userInfo.getNumber() +
+										"\n항공사 : " + userInfo.getAirline() + "\n항공편 : " + userInfo.getAirplane() +
+										"\n날짜 : " + userInfo.getDate() + "\n출발지 : 인천" + "\n도착지 : " + userInfo.getDestination() + 
+										"\n인원 : " + userInfo.getPeople();
+				
+				 JFileChooser fileChooser = new JFileChooser();
+	             fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt")); // .txt 파일만 필터링
+	             int userSelection = fileChooser.showSaveDialog(null);
+
+	             if (userSelection == JFileChooser.APPROVE_OPTION) {
+	            	 File fileToSave = fileChooser.getSelectedFile();
+	                 if (!fileToSave.getAbsolutePath().endsWith(".txt")) {
+	                        // 파일의 확장자가 .txt가 아닌 경우 확장자를 .txt로 추가
+	                	 fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
+	                 }
+	                 try (PrintWriter writer = new PrintWriter(new FileWriter(fileToSave))) {
+	                	 writer.println(reservationInfo); // 예매내역을 텍스트 파일에 쓰기
+	                     System.out.println("예매내역이 저장되었습니다.");
+	                 } catch (IOException e2) {
+	                     e2.printStackTrace();
+	                     System.err.println("저장 실패");
+	                 }
+	             }
+	       }
 			
 		});
 		
@@ -203,24 +226,13 @@ public class ReservationDetails {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 메인화면 - 항공권 조회 화면
-				new ReservationPanel1();
-				f.setVisible(false);
+				new ReservationPanel(userInfo);
+				setVisible(false);
 			}
 			
 		});
 		
 	}
-	
 
-	public void logout() {
-		userInfo = null;
-	}
-	
-	public static void main(String[] args) {
-		
-		ReservationDetails rd = new ReservationDetails();
-		
-	}
-	
 	
 }

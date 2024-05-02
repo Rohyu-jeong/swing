@@ -5,19 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-//import flight.Flight;
-//import flight.FlightList;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
-//import reservationDetails.ReservationDetails;
-//import test_jframe.JFrameTest;
-//import userInfo.UserInfo;
-//import userInfo.UserInfoManager;
 
-public class ReservationPanel {
+
+public class ReservationPanel extends JFrame{
 	
 	/*
 	 * 항공권 조회 화면
@@ -42,11 +35,16 @@ public class ReservationPanel {
 	JPanel jpCon;
 	JPanel jpCheck;
 	
+	UserInfo userInfo;
 	String date;
 	String destination;
 	int countPeople;
 	
-	public ReservationPanel () {
+	public ReservationPanel () { }
+	
+	public ReservationPanel (UserInfo userInfo) {
+		
+		this.userInfo = userInfo;
 		
 		// 상단 바 - 예매내역, 로그아웃
 		jMenu = new JMenuBar ();
@@ -86,7 +84,7 @@ public class ReservationPanel {
 		String[] destList = {"목적지", "김포", "청주", "김해", "대구", "제주"};
 		JComboBox<String> dest = new JComboBox <> (destList);
 		dest.setPreferredSize(new Dimension(200, 38));
-		dest.setFont(new Font("맑은 고딕", Font.PLAIN, 30));
+		dest.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
 		dest.setBackground(Color.white);
 		
 		ActionListener alDest = new ActionListener() {
@@ -117,13 +115,13 @@ public class ReservationPanel {
 
 				
 		// 인원 선택
-		Integer[] num = {1, 2, 3};
+		Integer[] num = {0, 1, 2, 3};
 		JComboBox<Integer> people = new JComboBox <>(num);
 		people.setPreferredSize(new Dimension(200, 30));
 		people.setBackground(Color.white);
 		people.setSelectedIndex(0);
 
-		people.setFont(new Font("맑은 고딕", Font.PLAIN, 25));
+		people.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
 					
 		ActionListener alPeople = new ActionListener() {
 			@Override
@@ -163,23 +161,21 @@ public class ReservationPanel {
 				
 		jpCheck.add(check);
 		
-		JFrame f = new JFrame();
-		f.setJMenuBar(jMenu);
-		f.add(jpCon, BorderLayout.CENTER);
-		f.setLocationRelativeTo(null);
-		f.add(jpCheck, BorderLayout.SOUTH);
-		f.setSize(1400,800);
+		setJMenuBar(jMenu);
+		add(jpCon, BorderLayout.CENTER);
+		setLocation(getX( )+ 250, getY() + 110);
+		add(jpCheck, BorderLayout.SOUTH);
+		setSize(1400,800);
 		
-		f.setVisible(true);
+		setVisible(true);
 
 		// 예매내역 버튼 클릭 시 예매내역 페이지로 이동
 		reser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 예매내역 창 호출
-				UserInfo userInfo = new UserInfo("id");
 				new ReservationDetails(userInfo);
-				f.setVisible(false);
+				setVisible(false);
 			}
 		});
 		
@@ -189,9 +185,9 @@ public class ReservationPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 로그인 창 호출
-//				logout();
-				// new LoginForm();
-				f.setVisible(false);
+				new Logout(userInfo);
+				new LoginForm();
+				setVisible(false);
 			}
 		});
 		
@@ -205,12 +201,12 @@ public class ReservationPanel {
 				if(!selectedDest.equals("목적지")) {
 					ReservationInfo tempReser = new ReservationInfo(date, destination, countPeople);
 					
-					new FlightList(tempReser);
+					new FlightList(userInfo, tempReser);
 					
-		            f.setVisible(false);
+		            setVisible(false);
 				}  else {
 		            // 유효하지 않은 목적지인 경우
-		            JOptionPane.showMessageDialog(f, "목적지를 선택해주세요.");
+		            JOptionPane.showMessageDialog(null, "목적지를 선택해주세요.");
 		        }
 				
 			}
@@ -218,17 +214,5 @@ public class ReservationPanel {
 		
 		
 	}
-	
-//	public void logout() {
-//		userInfo = null;
-//	}
-	
-	public static void main(String[] args) {
-		
-		ReservationPanel rp = new ReservationPanel();
-		
-	}
-	
-
 	
 }
