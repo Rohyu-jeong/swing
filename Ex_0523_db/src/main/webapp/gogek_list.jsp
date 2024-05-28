@@ -7,8 +7,8 @@
 <%@page import="javax.sql.DataSource"%>
 <%@page import="javax.naming.Context"%>
 <%@page import="javax.naming.InitialContext"%>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
     
 <%
 	InitialContext ic = new InitialContext();
@@ -43,17 +43,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	
 	<table border="1">
 		<tr>
-			<th>��ȣ</th>
-			<th>�̸�</th>
-			<th>�ּ�</th>
-			<th>�ֹι�ȣ</th>
+			<th>번호</th>
+			<th>이름</th>
+			<th>주소</th>
+			<th>주민번호</th>
 		</tr>
 		<%for(int i = 0; i < gogek_list.size(); i++){ %>
 		<tr>

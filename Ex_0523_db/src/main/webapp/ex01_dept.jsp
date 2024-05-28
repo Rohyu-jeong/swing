@@ -7,40 +7,40 @@
 <%@page import="javax.sql.DataSource"%>
 <%@page import="javax.naming.InitialContext"%>
 <%@page import="javax.naming.Context" %>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%
-	// ÅèÄ¹ÀÌ JNDI¸¦ °Ë»öÇÏ±â À§ÇØ ÇÊ¿äÇÑ Å¬·¡½º (JNDI ±â¹ı : Java naming directory interface)
+	// í†°ìº£ì´ JNDIë¥¼ ê²€ìƒ‰í•˜ê¸° ìœ„í•´ í•„ìš”í•œ í´ë˜ìŠ¤ (JNDI ê¸°ë²• : Java naming directory interface)
 	InitialContext ic = new InitialContext();
 
 	Context ctx = (Context)ic.lookup("java:comp/env");
 	
-	// lookup -> Ã£´Â ÇÔ¼ö
-	// java:comp/env -> ÀÚ¹Ù¿¡ ³»Àå µÇ¾î ÀÖ´Â ¸®¼Ò½º ÀÚ¿øÀ» °Ë»öÇÏ´Â »ó¼ö(°íÁ¤)
+	// lookup -> ì°¾ëŠ” í•¨ìˆ˜
+	// java:comp/env -> ìë°”ì— ë‚´ì¥ ë˜ì–´ ìˆëŠ” ë¦¬ì†ŒìŠ¤ ìì›ì„ ê²€ìƒ‰í•˜ëŠ” ìƒìˆ˜(ê³ ì •)
 	
-	// °Ë»öµÈ Resource¸¦ ÅëÇØ JNDIÀÇ ÀÚ¿øÀ» °Ë»ö
-	// context.xmlÆÄÀÏÀÇ resource ¿µ¿ª¿¡ ÂüÁ¶µÇ¾î ÀÖ´Â name ¼Ó¼º°ª
+	// ê²€ìƒ‰ëœ Resourceë¥¼ í†µí•´ JNDIì˜ ìì›ì„ ê²€ìƒ‰
+	// context.xmlíŒŒì¼ì˜ resource ì˜ì—­ì— ì°¸ì¡°ë˜ì–´ ìˆëŠ” name ì†ì„±ê°’
 	DataSource ds = (DataSource)ctx.lookup("jdbc/oracle_test");
 	
 	Connection conn = ds.getConnection();
 	
 	String sql = "select * from dept";
 	
-	// ¹®ÀÚ¿­ ÇüÅÂÀÇ sql¹®À» ½ÇÁ¦ Äõ¸®¹®À¸·Î Àü´Ş
+	// ë¬¸ìì—´ í˜•íƒœì˜ sqlë¬¸ì„ ì‹¤ì œ ì¿¼ë¦¬ë¬¸ìœ¼ë¡œ ì „ë‹¬
 	PreparedStatement pstmt = conn.prepareStatement(sql);
 	
-	// executeQuery() : Àü´Ş¹ŞÀº Äõ¸®¹®À» ½ÇÇàÇÏ¿© °á°ú¸¦ ¹İÈ¯¹Ş´Â´Ù.
-	// Àü´Ş¹ŞÀº µ¥ÀÌÅÍ´Â rs°´Ã¼¿¡ ÀúÀåµÊ
+	// executeQuery() : ì „ë‹¬ë°›ì€ ì¿¼ë¦¬ë¬¸ì„ ì‹¤í–‰í•˜ì—¬ ê²°ê³¼ë¥¼ ë°˜í™˜ë°›ëŠ”ë‹¤.
+	// ì „ë‹¬ë°›ì€ ë°ì´í„°ëŠ” rsê°ì²´ì— ì €ì¥ë¨
 	ResultSet rs = pstmt.executeQuery();
 	
-	out.println("--- µğºñ Á¢¼Ó ¼º°ø ---");
+	out.println("--- ë””ë¹„ ì ‘ì† ì„±ê³µ ---");
 	
 	List<DeptVO> dept_list = new ArrayList <> ();
 	
 	while(rs.next()) {
 		DeptVO vo = new DeptVO();
 		
-		// ÇöÀç ÇàÀÇ °ªÀ» vo¿¡ ´ã´Â´Ù.
+		// í˜„ì¬ í–‰ì˜ ê°’ì„ voì— ë‹´ëŠ”ë‹¤.
 		vo.setDeptno(rs.getInt("deptno"));
 		vo.setDname(rs.getString("dname"));
 		vo.setLoc(rs.getString("loc"));
@@ -57,7 +57,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
 	function send(data) {
@@ -73,11 +73,11 @@
 <body>
 	<form name="m_form">
 	<table border="1">
-		<caption>ºÎ¼­¸ñ·Ï</caption>
+		<caption>ë¶€ì„œëª©ë¡</caption>
 		<tr>
-			<th>ºÎ¼­¹øÈ£</th>
-			<th>ºÎ¼­¸í</th>
-			<th>ºÎ¼­À§Ä¡</th>
+			<th>ë¶€ì„œë²ˆí˜¸</th>
+			<th>ë¶€ì„œëª…</th>
+			<th>ë¶€ì„œìœ„ì¹˜</th>
 		</tr>
 		<%for(int i = 0; i < dept_list.size(); i++){ %>
 		<tr>
